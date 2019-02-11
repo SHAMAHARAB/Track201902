@@ -1,0 +1,1 @@
+web: java -jar target/spring-boot-sample.jar --server.port=$PORT
