@@ -1,23 +1,28 @@
 package jp.co.softbank.trackproject.service;
 
+import static org.mockito.Mockito.doNothing;
+
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import jp.co.softbank.trackproject.model.Recipe;
+import jp.co.softbank.trackproject.repository.RecipeRepository;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
 public class RecipeServiceImplTest {
   
-  @Autowired
+  @InjectMocks
   private RecipeServiceImpl target;
+  
+  @Mock
+  private RecipeRepository mockRepository;
+  
 
   @Test
   public void test_create() {
+    MockitoAnnotations.initMocks(this);
     Recipe recipe = new Recipe();
+    doNothing().when(mockRepository).insert(recipe);
     target.create(recipe);
   }
 
