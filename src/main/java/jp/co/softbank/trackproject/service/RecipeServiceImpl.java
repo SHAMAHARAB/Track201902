@@ -5,12 +5,20 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import jp.co.softbank.trackproject.model.Recipe;
+import jp.co.softbank.trackproject.repository.RecipeRepository;
 
 @Service
 public class RecipeServiceImpl implements RecipeService {
+  
+  private RecipeRepository recipeRepository;
+  
+  public RecipeServiceImpl(RecipeRepository recipeRepository) {
+    this.recipeRepository = recipeRepository;
+  }
 
   @Override
   public Recipe create(Recipe recipe) {
+    recipeRepository.insert(recipe);
     return null;
   }
 
