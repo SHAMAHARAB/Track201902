@@ -19,7 +19,7 @@ public class RecipeServiceImpl implements RecipeService {
   @Override
   public Recipe create(Recipe recipe) {
     recipeRepository.insert(recipe);
-    return null;
+    return recipe;
   }
 
   @Override

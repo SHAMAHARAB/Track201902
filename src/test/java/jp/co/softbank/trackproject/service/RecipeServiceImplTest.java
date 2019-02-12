@@ -1,5 +1,7 @@
 package jp.co.softbank.trackproject.service;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.doNothing;
 
 import org.junit.Test;
@@ -17,13 +19,13 @@ public class RecipeServiceImplTest {
   @Mock
   private RecipeRepository mockRepository;
   
-
   @Test
   public void test_create() {
     MockitoAnnotations.initMocks(this);
-    Recipe recipe = new Recipe();
+    Recipe recipe = new Recipe("トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
     doNothing().when(mockRepository).insert(recipe);
-    target.create(recipe);
+    Recipe actual = target.create(recipe);
+    assertThat(actual, is(recipe));
   }
 
 }
