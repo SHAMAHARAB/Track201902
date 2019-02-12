@@ -2,8 +2,11 @@ package jp.co.softbank.trackproject.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import jp.co.softbank.trackproject.model.Recipe;
 
+@Service
 public class RecipeServiceImpl implements RecipeService {
 
   @Override
