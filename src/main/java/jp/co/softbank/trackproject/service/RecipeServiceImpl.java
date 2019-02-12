@@ -2,10 +2,10 @@ package jp.co.softbank.trackproject.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import jp.co.softbank.trackproject.model.Recipe;
 import jp.co.softbank.trackproject.repository.RecipeRepository;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class RecipeServiceImpl implements RecipeService {

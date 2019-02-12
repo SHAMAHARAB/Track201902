@@ -4,12 +4,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.doNothing;
 
+import jp.co.softbank.trackproject.model.Recipe;
+import jp.co.softbank.trackproject.repository.RecipeRepository;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import jp.co.softbank.trackproject.model.Recipe;
-import jp.co.softbank.trackproject.repository.RecipeRepository;
 
 public class RecipeServiceImplTest {
   
@@ -19,9 +21,13 @@ public class RecipeServiceImplTest {
   @Mock
   private RecipeRepository mockRepository;
   
+  @Before
+  public void before() {
+    MockitoAnnotations.initMocks(this);
+  }
+  
   @Test
   public void test_create() {
-    MockitoAnnotations.initMocks(this);
     Recipe recipe = new Recipe("トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
     doNothing().when(mockRepository).insert(recipe);
     Recipe actual = target.create(recipe);
