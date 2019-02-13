@@ -31,6 +31,8 @@ public class RecipeRepositoryMapperTest {
 
   @Test
   public void test() {
+    Recipe recipe = new Recipe("トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
+    target.insert(recipe);
   }
 
 }
