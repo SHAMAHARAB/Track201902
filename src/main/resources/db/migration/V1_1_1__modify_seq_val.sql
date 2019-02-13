@@ -1,0 +1,1 @@
+SELECT setval('recipes_id_seq', 2);
