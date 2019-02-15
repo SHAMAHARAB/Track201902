@@ -18,8 +18,19 @@ public interface RecipeRepository {
    */
   void insert(Recipe recipe);
   
+  /**
+   * 指定したレシピ一つを返します。
+   * 
+   * @param id 主キー
+   * @return 指定したレシピ
+   */
   Recipe selectById(int id);
   
+  /**
+   * 全てのレシピを返します。
+   * 
+   * @return 全てのレシピ
+   */
   List<Recipe> selectAll();
 
   void updateById(int id, Recipe recipe);
