@@ -19,8 +19,19 @@ public interface RecipeService {
    */
   Recipe create(Recipe recipe);
   
+  /**
+   * 指定したレシピ一つを返します。
+   * 
+   * @param id 主キー
+   * @return 指定したレシピ
+   */
   Recipe findById(int id);
   
+  /**
+   * 全てのレシピを返します。
+   * 
+   * @return 全てのレシピ
+   */
   List<Recipe> findAll();
 
   Recipe updateById(int id, Recipe recipe);

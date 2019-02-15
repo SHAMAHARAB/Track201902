@@ -1,11 +1,17 @@
 package jp.co.softbank.trackproject.repository.mybatis;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 import java.net.MalformedURLException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -54,6 +60,8 @@ public class RecipeRepositoryMapperTest {
   @Autowired
   private DataSource dataSourceTest;
   
+  private DatabaseConnection targetConnection;
+  
   private IDataSet targetDataSet;
   
   private static final String SEQ_NAME = "recipes_id_seq";
@@ -65,31 +73,33 @@ public class RecipeRepositoryMapperTest {
   @Before
   public void beforeRestDb() 
       throws CannotGetJdbcConnectionException, DatabaseUnitException, SQLException {
-    DatabaseConnection targetConnection = 
-        new DatabaseConnection(DataSourceUtils.getConnection(dataSourceTest));
+    targetConnection = new DatabaseConnection(DataSourceUtils.getConnection(dataSourceTest));
     targetDataSet = targetConnection.createDataSet();
     Statement statement = DataSourceUtils.getConnection(dataSourceTest).createStatement();
     ResultSet rs = statement.executeQuery("(select max(id) as id from " + TABLE_NAME + ")");
     rs.next();
     startSeqId = rs.getInt("id");
-    DatabaseOperation.DELETE_ALL.execute(targetConnection, targetDataSet);
   }
   
   @After
   public void afterRestSeq() 
       throws CannotGetJdbcConnectionException, DatabaseUnitException, SQLException {
-    DatabaseConnection targetConnection = 
-        new DatabaseConnection(DataSourceUtils.getConnection(dataSourceTest));
-    targetDataSet = targetConnection.createDataSet();
-    Statement statement = DataSourceUtils.getConnection(dataSourceTest).createStatement();
-    statement.executeQuery("select setval('" + SEQ_NAME + "', " + startSeqId + ")");
+    if (startSeqId > 0) {
+      Statement statement = DataSourceUtils.getConnection(dataSourceTest).createStatement();
+      statement.executeQuery("select setval('" + SEQ_NAME + "', " + startSeqId + ")");
+    }
   }
 
   @Test
-  public void test_create() throws SQLException, DatabaseUnitException, MalformedURLException {    
+  public void test_insert() throws SQLException, DatabaseUnitException, MalformedURLException {    
+    // prepare
+    DatabaseOperation.DELETE_ALL.execute(targetConnection, targetDataSet);
     Recipe recipe = new Recipe("トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
+    
+    // test
     target.insert(recipe);
     
+    // verify
     ITable actualTable = targetDataSet.getTable("recipes");
     ITable filteredActualTable = 
         DefaultColumnFilter.excludedColumnsTable(
@@ -104,5 +114,41 @@ public class RecipeRepositoryMapperTest {
     
     Assertion.assertEquals(filteredExpectedTable, filteredActualTable);
   }
+  
+  @Test
+  @DatabaseSetup("get-test.xml")
+  public void test_selectById() {    
+    // test
+    Recipe actual = target.selectById(1);
+    
+    // verify
+    Recipe expected = new Recipe("チキンカレー", "45分", "4人", "玉ねぎ,肉,スパイス", 1000);
+    assertThat(actual, is(expected));
+  }
 
+  @Test
+  @DatabaseSetup("get-test.xml")
+  public void test_selectAll() {    
+    // test
+    List<Recipe> actual = target.selectAll();
+    
+    // verify
+    List<Recipe> expected = Arrays.asList(
+        new Recipe(1, "チキンカレー", "45分", "4人", "玉ねぎ,肉,スパイス", 1000),
+        new Recipe(2, "オムライス", "30分", "2人", "玉ねぎ,卵,スパイス,醤油", 700),
+        new Recipe(3, "トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450));
+    
+    assertThat(actual.size(), is(3));
+    assertThat(actual, is(expected));
+  }
+  
+  @Test
+  @DatabaseSetup("get-test-empty.xml")
+  public void test_selectAll_empty() {    
+    // test
+    List<Recipe> actual = target.selectAll();
+    
+    // verify
+    assertThat(actual.size(), is(0));
+  }
 }

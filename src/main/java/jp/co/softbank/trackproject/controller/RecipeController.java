@@ -2,6 +2,7 @@ package jp.co.softbank.trackproject.controller;
 
 import jp.co.softbank.trackproject.client.dto.RecipeWebDto;
 import jp.co.softbank.trackproject.client.exception.CreateExceptionResponse;
+import jp.co.softbank.trackproject.client.response.AllRecipeResponse;
 import jp.co.softbank.trackproject.client.response.RecipeResponse;
 import jp.co.softbank.trackproject.service.RecipeService;
 
@@ -9,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/recipes")
 public class RecipeController {
+  
+  private static final String POST_MESSAGE = "Recipe successfully created!";
+
+  private static final String GET_MESSAGE = "Recipe details by id";
   
   private RecipeService recipeService;
 
@@ -43,7 +50,31 @@ public class RecipeController {
    */
   @PostMapping
   public RecipeResponse create(@RequestBody @Validated RecipeWebDto recipeWebDto) {
-    return new RecipeResponse(recipeService.create(recipeWebDto.transferRecipe()));
+    return new RecipeResponse(
+        recipeService.create(recipeWebDto.transferRecipe()), 
+        POST_MESSAGE);
+  }
+  
+  /**
+   * 指定したレシピ一つを返します。
+   * 
+   * @param id 主キー
+   * @return idで指定したレシピ
+   */
+  @GetMapping("/{id}")
+  public RecipeResponse findById(@PathVariable int id) {
+    return new RecipeResponse(recipeService.findById(id),
+        GET_MESSAGE);
+  }
+  
+  /**
+   * 全てのレシピ一つを返します。
+   * 
+   * @return 全てのレシピ
+   */
+  @GetMapping
+  public AllRecipeResponse findAll() {
+    return new AllRecipeResponse(recipeService.findAll());
   }
   
   /**
