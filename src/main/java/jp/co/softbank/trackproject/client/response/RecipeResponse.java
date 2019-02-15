@@ -21,8 +21,8 @@ public class RecipeResponse extends MessageResponse {
    * 
    * @param recipe Recipe
    */
-  public RecipeResponse(Recipe recipe) {
-    super("Recipe successfully created!");
+  public RecipeResponse(Recipe recipe, String message) {
+    super(message);
     this.recipe = Arrays.asList(new RecipeWebDto(recipe));
   }
 }

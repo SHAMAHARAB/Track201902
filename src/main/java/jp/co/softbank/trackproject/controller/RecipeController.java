@@ -45,12 +45,15 @@ public class RecipeController {
    */
   @PostMapping
   public RecipeResponse create(@RequestBody @Validated RecipeWebDto recipeWebDto) {
-    return new RecipeResponse(recipeService.create(recipeWebDto.transferRecipe()));
+    return new RecipeResponse(
+        recipeService.create(recipeWebDto.transferRecipe()), 
+        "Recipe successfully created!");
   }
   
   @GetMapping("/{id}")
   public RecipeResponse findById(@PathVariable int id) {
-    return null;
+    return new RecipeResponse(recipeService.findById(id),
+        "Recipe details by id");
   }
   
   /**
