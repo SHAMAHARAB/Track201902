@@ -42,7 +42,6 @@ public class RecipeController {
    * @return 登録成功時に返却するRecipeResponseクラス
    */
   @PostMapping
-  @ResponseStatus(HttpStatus.CREATED)
   public RecipeResponse create(@RequestBody @Validated RecipeWebDto recipeWebDto) {
     return new RecipeResponse(recipeService.create(recipeWebDto.transferRecipe()));
   }
@@ -52,7 +51,7 @@ public class RecipeController {
    * 
    * @return 登録失敗時に返却するCreateExceptionResponseクラス
    */
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseStatus(HttpStatus.OK)
   @ExceptionHandler({MethodArgumentNotValidException.class})
   public CreateExceptionResponse badRequest() {
     return new CreateExceptionResponse("title, making_time, serves, ingredients, cost");

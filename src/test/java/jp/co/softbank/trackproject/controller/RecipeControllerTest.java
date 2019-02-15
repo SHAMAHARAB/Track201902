@@ -48,7 +48,7 @@ public class RecipeControllerTest {
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(new ObjectMapper().writeValueAsString(requstForm))
         )
-        .andExpect(status().isCreated())
+        .andExpect(status().isOk())
         .andExpect(content().json(
           resource.content("post_recipe-res.json"), true));
   }
@@ -60,7 +60,7 @@ public class RecipeControllerTest {
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(new ObjectMapper().writeValueAsString(new RecipeWebDto()))
         )
-        .andExpect(status().isBadRequest())
+        .andExpect(status().isOk())
         .andExpect(content().json(
           resource.content("post_recipe_exception-res.json"), true));
   }
