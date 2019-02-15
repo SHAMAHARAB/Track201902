@@ -1,6 +1,7 @@
 package jp.co.softbank.trackproject.controller;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -9,6 +10,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import jp.co.softbank.trackproject.client.dto.RecipeWebDto;
 import jp.co.softbank.trackproject.model.Recipe;
@@ -63,5 +67,45 @@ public class RecipeControllerTest {
         .andExpect(status().isOk())
         .andExpect(content().json(
           resource.content("post_recipe_exception-res.json"), true));
+  }
+  
+  @Test
+  public void test_findById() throws Exception {
+    // prepare
+    Recipe recipe = new Recipe("トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
+    when(recipeService.findById(1)).thenReturn(recipe);
+    
+    // test & verify
+    mockMvc.perform(get("/recipes/1"))
+        .andExpect(status().isOk())
+        .andExpect(content().json(
+          resource.content("get_recipe-res.json"), true));
+  }
+  
+  @Test
+  public void test_findAll() throws IOException, Exception {
+    // prepare
+    List<Recipe> recipes = Arrays.asList(
+        new Recipe(1, "チキンカレー", "45分", "4人", "玉ねぎ,肉,スパイス", 1000),
+        new Recipe(2, "オムライス", "30分", "2人", "玉ねぎ,卵,スパイス,醤油", 700),
+        new Recipe(3, "トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450));
+    when(recipeService.findAll()).thenReturn(recipes);
+    
+    // test & verify
+    mockMvc.perform(get("/recipes/"))
+        .andExpect(status().isOk())
+        .andExpect(content().json(
+          resource.content("get_all_recipe-res.json"), true));
+  }
+  
+  @Test
+  public void test_findAll_empty() throws IOException, Exception {
+    // prepare
+    when(recipeService.findAll()).thenReturn(Collections.emptyList());
+    
+    // test & verify
+    mockMvc.perform(get("/recipes/"))
+        .andExpect(status().isOk())
+        .andExpect(content().json("{}"));
   }
 }

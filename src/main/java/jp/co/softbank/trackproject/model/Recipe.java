@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Recipe {
   
+  private int id;
+  
   private String title;
   
   private String makingTime;
@@ -23,4 +25,22 @@ public class Recipe {
   private String ingredients;
   
   private int cost;
+  
+  /**
+   * コンストラクタです。
+   * 
+   * @param title title
+   * @param makingTime makingTime
+   * @param serves serves
+   * @param ingredients ingredients
+   * @param cost cost
+   */
+  public Recipe(
+      String title, String makingTime, String serves, String ingredients, int cost) {
+    this.title = title;
+    this.makingTime = makingTime;
+    this.serves = serves;
+    this.ingredients = ingredients;
+    this.cost = cost;
+  }
 }
