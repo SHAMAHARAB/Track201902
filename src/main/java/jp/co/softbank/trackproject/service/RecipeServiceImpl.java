@@ -8,7 +8,7 @@ import jp.co.softbank.trackproject.repository.RecipeRepository;
 import org.springframework.stereotype.Service;
 
 /**
- * Recipeの登録・照会・更新・削除を行うServiceクラスです。
+ * レシピの登録・照会・更新・削除を行うServiceクラスです。
  * @author H.Hamahara
  */
 @Service
@@ -26,9 +26,7 @@ public class RecipeServiceImpl implements RecipeService {
   }
 
   /**
-   * レシピを作成します。
-   * @param recipe Recipe
-   * @return 登録対象のレシピ
+   * {@inheritDoc}
    */
   @Override
   public Recipe create(Recipe recipe) {

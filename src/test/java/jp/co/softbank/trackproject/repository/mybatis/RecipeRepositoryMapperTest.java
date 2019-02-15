@@ -3,7 +3,9 @@ package jp.co.softbank.trackproject.repository.mybatis;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 
 import java.net.MalformedURLException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.sql.DataSource;
 
@@ -17,6 +19,7 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,13 +56,33 @@ public class RecipeRepositoryMapperTest {
   
   private IDataSet targetDataSet;
   
+  private static final String SEQ_NAME = "recipes_id_seq";
+  
+  private static final String TABLE_NAME = "recipes";
+  
+  private int startSeqId;
+  
   @Before
   public void beforeRestDb() 
       throws CannotGetJdbcConnectionException, DatabaseUnitException, SQLException {
     DatabaseConnection targetConnection = 
         new DatabaseConnection(DataSourceUtils.getConnection(dataSourceTest));
     targetDataSet = targetConnection.createDataSet();
+    Statement statement = DataSourceUtils.getConnection(dataSourceTest).createStatement();
+    ResultSet rs = statement.executeQuery("(select max(id) as id from " + TABLE_NAME + ")");
+    rs.next();
+    startSeqId = rs.getInt("id");
     DatabaseOperation.DELETE_ALL.execute(targetConnection, targetDataSet);
+  }
+  
+  @After
+  public void afterRestSeq() 
+      throws CannotGetJdbcConnectionException, DatabaseUnitException, SQLException {
+    DatabaseConnection targetConnection = 
+        new DatabaseConnection(DataSourceUtils.getConnection(dataSourceTest));
+    targetDataSet = targetConnection.createDataSet();
+    Statement statement = DataSourceUtils.getConnection(dataSourceTest).createStatement();
+    statement.executeQuery("select setval('" + SEQ_NAME + "', " + startSeqId + ")");
   }
 
   @Test

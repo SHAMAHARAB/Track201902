@@ -1,4 +1,4 @@
-package jp.co.softbank.trackproject.exception;
+package jp.co.softbank.trackproject.client.exception;
 
 import jp.co.softbank.trackproject.client.response.MessageResponse;
 import lombok.Data;
