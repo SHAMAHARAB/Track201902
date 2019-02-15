@@ -10,6 +10,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import jp.co.softbank.trackproject.client.dto.RecipeWebDto;
 import jp.co.softbank.trackproject.model.Recipe;
@@ -77,5 +79,21 @@ public class RecipeControllerTest {
         .andExpect(status().isOk())
         .andExpect(content().json(
           resource.content("get_recipe-res.json"), true));
+  }
+  
+  @Test
+  public void test_findAll() throws IOException, Exception {
+    // prepare
+    List<Recipe> recipes = Arrays.asList(
+        new Recipe("チキンカレー", "45分", "4人", "玉ねぎ,肉,スパイス", 1000),
+        new Recipe("オムライス", "30分", "2人", "玉ねぎ,卵,スパイス,醤油", 700),
+        new Recipe("トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450));
+    when(recipeService.findAll()).thenReturn(recipes);
+    
+    // test & verify
+    mockMvc.perform(get("/recipes/"))
+        .andExpect(status().isOk())
+        .andExpect(content().json(
+          resource.content("get_all_recipe-res.json"), true));
   }
 }
