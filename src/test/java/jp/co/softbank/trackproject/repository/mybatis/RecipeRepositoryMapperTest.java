@@ -1,8 +1,10 @@
 package jp.co.softbank.trackproject.repository.mybatis;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.junit.Assert.assertThat;
+
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 import java.net.MalformedURLException;
 import java.sql.ResultSet;
@@ -12,6 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.sql.DataSource;
+
+import jp.co.softbank.trackproject.model.Recipe;
 
 import org.dbunit.Assertion;
 import org.dbunit.DatabaseUnitException;
@@ -36,11 +40,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-
-import jp.co.softbank.trackproject.model.Recipe;
 
 @MybatisTest
 @ContextConfiguration
@@ -85,10 +84,10 @@ public class RecipeRepositoryMapperTest {
   @After
   public void afterRestSeq() 
       throws CannotGetJdbcConnectionException, DatabaseUnitException, SQLException {
-    targetConnection = new DatabaseConnection(DataSourceUtils.getConnection(dataSourceTest));
-    targetDataSet = targetConnection.createDataSet();
-    Statement statement = DataSourceUtils.getConnection(dataSourceTest).createStatement();
-    statement.executeQuery("select setval('" + SEQ_NAME + "', " + startSeqId + ")");
+    if (startSeqId > 0) {
+      Statement statement = DataSourceUtils.getConnection(dataSourceTest).createStatement();
+      statement.executeQuery("select setval('" + SEQ_NAME + "', " + startSeqId + ")");
+    }
   }
 
   @Test
@@ -137,5 +136,15 @@ public class RecipeRepositoryMapperTest {
     
     assertThat(actual.size(), is(3));
     assertThat(actual, is(expected));
+  }
+  
+  @Test
+  @DatabaseSetup("get-test-empty.xml")
+  public void test_selectAll_empty() {    
+    // test
+    List<Recipe> actual = target.selectAll();
+    
+    // verify
+    assertThat(actual.size(), is(0));
   }
 }
