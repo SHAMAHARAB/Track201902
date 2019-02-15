@@ -4,7 +4,18 @@ import java.util.List;
 
 import jp.co.softbank.trackproject.model.Recipe;
 
+/**
+ * レシピの登録・照会・更新・削除を行うRepositoryインターフェースです。
+ * @author H.Hamahara
+ *
+ */
 public interface RecipeRepository {
+  
+  /**
+   * レシピを作成します。
+   * 
+   * @param recipe Recipe
+   */
   void insert(Recipe recipe);
   
   Recipe selectById(int id);
