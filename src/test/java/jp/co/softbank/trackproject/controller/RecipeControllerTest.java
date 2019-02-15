@@ -1,6 +1,7 @@
 package jp.co.softbank.trackproject.controller;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -63,5 +64,10 @@ public class RecipeControllerTest {
         .andExpect(status().isOk())
         .andExpect(content().json(
           resource.content("post_recipe_exception-res.json"), true));
+  }
+  
+  @Test
+  public void test_findById() throws Exception {
+    mockMvc.perform(get("/recipes/1"));
   }
 }
