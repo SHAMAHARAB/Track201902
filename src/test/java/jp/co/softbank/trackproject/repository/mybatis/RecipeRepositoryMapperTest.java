@@ -14,7 +14,9 @@ import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
+import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.operation.DatabaseOperation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
@@ -53,16 +55,24 @@ public class RecipeRepositoryMapperTest {
         new DatabaseConnection(DataSourceUtils.getConnection(dataSourceTest));
     IDataSet databaseDataSet = connection.createDataSet();
     
+    DatabaseOperation.DELETE_ALL.execute(connection, databaseDataSet);
+    
     Recipe recipe = new Recipe("トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
     target.insert(recipe);
     
     ITable actualTable = databaseDataSet.getTable("recipes");
+    ITable filteredActualTable = 
+        DefaultColumnFilter.excludedColumnsTable(
+            actualTable, new String[]{"ID", "CREATED_AT", "UPDATED_AT"});
     
     IDataSet expectedDataSet = new FlatXmlDataSetBuilder()
         .build(RecipeRepositoryMapperTest.class.getResourceAsStream("create-test.xml"));
     ITable expectedTable = expectedDataSet.getTable("recipes");
+    ITable filteredExpectedTable = 
+        DefaultColumnFilter.excludedColumnsTable(
+            expectedTable, new String[]{"ID", "CREATED_AT", "UPDATED_AT"});
     
-    Assertion.assertEquals(expectedTable, actualTable);
+    Assertion.assertEquals(filteredExpectedTable, filteredActualTable);
   }
 
 }
