@@ -91,11 +91,15 @@ public class RecipeRepositoryMapperTest {
   }
 
   @Test
-  public void test_create() throws SQLException, DatabaseUnitException, MalformedURLException {    
+  public void test_insert() throws SQLException, DatabaseUnitException, MalformedURLException {    
+    // prepare
     DatabaseOperation.DELETE_ALL.execute(targetConnection, targetDataSet);
     Recipe recipe = new Recipe("トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
+    
+    // test
     target.insert(recipe);
     
+    // verify
     ITable actualTable = targetDataSet.getTable("recipes");
     ITable filteredActualTable = 
         DefaultColumnFilter.excludedColumnsTable(

@@ -34,9 +34,14 @@ public class RecipeServiceImplTest {
   
   @Test
   public void test_create() {
+    // prepare
     Recipe recipe = new Recipe("トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
     doNothing().when(mockRepository).insert(recipe);
+    
+    // test
     Recipe actual = target.create(recipe);
+    
+    // verify
     assertThat(actual, is(recipe));
   }
   
@@ -73,7 +78,7 @@ public class RecipeServiceImplTest {
   }
 
   @Test
-  public void test_findAll_nothing() {
+  public void test_findAll_empty() {
     // prepare        
     when(mockRepository.selectAll()).thenReturn(Collections.emptyList());
     
