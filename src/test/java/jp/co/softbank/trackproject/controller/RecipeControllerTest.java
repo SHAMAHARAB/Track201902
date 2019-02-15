@@ -85,9 +85,9 @@ public class RecipeControllerTest {
   public void test_findAll() throws IOException, Exception {
     // prepare
     List<Recipe> recipes = Arrays.asList(
-        new Recipe("チキンカレー", "45分", "4人", "玉ねぎ,肉,スパイス", 1000),
-        new Recipe("オムライス", "30分", "2人", "玉ねぎ,卵,スパイス,醤油", 700),
-        new Recipe("トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450));
+        new Recipe(1, "チキンカレー", "45分", "4人", "玉ねぎ,肉,スパイス", 1000),
+        new Recipe(2, "オムライス", "30分", "2人", "玉ねぎ,卵,スパイス,醤油", 700),
+        new Recipe(3, "トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450));
     when(recipeService.findAll()).thenReturn(recipes);
     
     // test & verify

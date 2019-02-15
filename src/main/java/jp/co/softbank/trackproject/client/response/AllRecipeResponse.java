@@ -3,7 +3,7 @@ package jp.co.softbank.trackproject.client.response;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import jp.co.softbank.trackproject.client.dto.RecipeWebDto;
+import jp.co.softbank.trackproject.client.dto.RecipeWithIdWebDto;
 import jp.co.softbank.trackproject.model.Recipe;
 import lombok.Data;
 
@@ -14,7 +14,7 @@ import lombok.Data;
  */
 @Data
 public class AllRecipeResponse {
-  private List<RecipeWebDto> recipes;
+  private List<RecipeWithIdWebDto> recipes;
   
   /**
    * コンストラクタです。
@@ -23,7 +23,7 @@ public class AllRecipeResponse {
    */
   public AllRecipeResponse(List<Recipe> recipes) {
     this.recipes = recipes.stream()
-        .map(RecipeWebDto::new)
+        .map(RecipeWithIdWebDto::new)
         .collect(Collectors.toList());
   }
 }
