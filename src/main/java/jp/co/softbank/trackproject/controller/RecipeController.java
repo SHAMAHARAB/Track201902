@@ -54,6 +54,12 @@ public class RecipeController {
         POST_MESSAGE);
   }
   
+  /**
+   * 指定したレシピ一つを返します。
+   * 
+   * @param id 主キー
+   * @return idで指定したレシピ
+   */
   @GetMapping("/{id}")
   public RecipeResponse findById(@PathVariable int id) {
     return new RecipeResponse(recipeService.findById(id),
