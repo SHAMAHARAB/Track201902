@@ -41,7 +41,7 @@ public class RecipeServiceImpl implements RecipeService {
 
   @Override
   public List<Recipe> findAll() {
-    return null;
+    return recipeRepository.selectAll();
   }
 
   @Override
