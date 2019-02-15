@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import jp.co.softbank.trackproject.client.dto.RecipeWebDto;
@@ -95,5 +96,16 @@ public class RecipeControllerTest {
         .andExpect(status().isOk())
         .andExpect(content().json(
           resource.content("get_all_recipe-res.json"), true));
+  }
+  
+  @Test
+  public void test_findAll_empty() throws IOException, Exception {
+    // prepare
+    when(recipeService.findAll()).thenReturn(Collections.emptyList());
+    
+    // test & verify
+    mockMvc.perform(get("/recipes/"))
+        .andExpect(status().isOk())
+        .andExpect(content().json("{}"));
   }
 }
