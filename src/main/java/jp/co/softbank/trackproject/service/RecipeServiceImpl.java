@@ -36,7 +36,7 @@ public class RecipeServiceImpl implements RecipeService {
 
   @Override
   public Recipe findById(int id) {
-    return null;
+    return recipeRepository.selectById(id);
   }
 
   @Override

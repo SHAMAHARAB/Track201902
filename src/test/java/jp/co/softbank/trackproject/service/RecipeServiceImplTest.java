@@ -3,6 +3,7 @@ package jp.co.softbank.trackproject.service;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 import jp.co.softbank.trackproject.model.Recipe;
 import jp.co.softbank.trackproject.repository.RecipeRepository;
@@ -36,7 +37,15 @@ public class RecipeServiceImplTest {
   
   @Test
   public void test_findById() {
-    target.findById(1);
+    // prepare
+    Recipe expected = new Recipe("トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
+    when(mockRepository.selectById(1)).thenReturn(expected);
+    
+    // test
+    Recipe actual = target.findById(1);
+    
+    // verify
+    assertThat(actual, is(expected));
   }
 
 }
