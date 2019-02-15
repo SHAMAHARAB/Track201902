@@ -7,6 +7,8 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import jp.co.softbank.trackproject.model.Recipe;
@@ -71,4 +73,16 @@ public class RecipeServiceImplTest {
     assertThat(actual, is(samePropertyValuesAs(expected)));
   }
 
+  @Test
+  public void test_findAll_nothing() {
+    // prepare        
+    when(mockRepository.selectAll()).thenReturn(Collections.emptyList());
+    
+    // test
+    List<Recipe> actual = target.findAll();
+    
+    // verify
+    assertThat(actual.size(), is(0));
+    assertThat(actual, is(Collections.emptyList()));
+  }
 }
