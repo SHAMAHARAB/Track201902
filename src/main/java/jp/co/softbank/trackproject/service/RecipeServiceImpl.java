@@ -34,14 +34,20 @@ public class RecipeServiceImpl implements RecipeService {
     return recipe;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Recipe findById(int id) {
-    return null;
+    return recipeRepository.selectById(id);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public List<Recipe> findAll() {
-    return null;
+    return recipeRepository.selectAll();
   }
 
   @Override
