@@ -37,4 +37,18 @@ public class RecipeWebDto {
     this.ingredients = recipe.getIngredients();
     this.cost = String.valueOf(recipe.getCost());
   }
+
+  /**
+   * RecipeWebDtoの情報をRecipeクラスに変換するクラスです。
+   * @return Recipe
+   */
+  public Recipe transferRecipe() {
+    return new Recipe(
+      this.title,
+      this.making_time,
+      this.serves,
+      this.ingredients,
+      Integer.parseInt(this.cost)
+    );
+  }
 }
