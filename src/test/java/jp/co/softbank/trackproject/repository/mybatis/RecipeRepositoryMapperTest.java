@@ -104,5 +104,10 @@ public class RecipeRepositoryMapperTest {
     
     Assertion.assertEquals(filteredExpectedTable, filteredActualTable);
   }
+  
+  @Test
+  public void test_selectById() {
+    target.selectById(1);
+  }
 
 }
