@@ -7,6 +7,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * クライアントからのリクエスト、レスポンスを受けつけるDtoクラスです。
+ * @author H.Hamahara
+ *
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
