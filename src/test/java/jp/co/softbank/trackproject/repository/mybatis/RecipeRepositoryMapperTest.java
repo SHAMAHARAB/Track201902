@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.TestPropertySource;
@@ -48,12 +49,13 @@ public class RecipeRepositoryMapperTest {
 
   @Test
   public void test() throws SQLException, DatabaseUnitException, MalformedURLException {
+    DatabaseConnection connection = 
+        new DatabaseConnection(DataSourceUtils.getConnection(dataSourceTest));
+    IDataSet databaseDataSet = connection.createDataSet();
+    
     Recipe recipe = new Recipe("トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
     target.insert(recipe);
     
-    DatabaseConnection connection = 
-        new DatabaseConnection((this.dataSourceTest).getConnection());
-    IDataSet databaseDataSet = connection.createDataSet();
     ITable actualTable = databaseDataSet.getTable("recipes");
     
     IDataSet expectedDataSet = new FlatXmlDataSetBuilder()
