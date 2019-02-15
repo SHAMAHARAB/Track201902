@@ -5,6 +5,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.io.IOException;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jp.co.softbank.trackproject.client.dto.RecipeWebDto;
@@ -48,5 +51,17 @@ public class RecipeControllerTest {
         .andExpect(status().isCreated())
         .andExpect(content().json(
           resource.content("post_recipe-res.json"), true));
+  }
+  
+  @Test
+  public void test_exception() throws JsonProcessingException, IOException, Exception {
+    // test & verify
+    mockMvc.perform(post("/recipes")
+        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .content(new ObjectMapper().writeValueAsString(new RecipeWebDto()))
+        )
+        .andExpect(status().isBadRequest())
+        .andExpect(content().json(
+          resource.content("post_recipe_exception-res.json"), true));
   }
 }

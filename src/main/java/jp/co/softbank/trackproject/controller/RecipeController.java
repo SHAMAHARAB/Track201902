@@ -2,10 +2,13 @@ package jp.co.softbank.trackproject.controller;
 
 import jp.co.softbank.trackproject.client.dto.RecipeWebDto;
 import jp.co.softbank.trackproject.client.response.RecipeResponse;
+import jp.co.softbank.trackproject.exception.CreateExceptionResponse;
 import jp.co.softbank.trackproject.service.RecipeService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +29,12 @@ public class RecipeController {
   @ResponseStatus(HttpStatus.CREATED)
   public RecipeResponse create(@RequestBody @Validated RecipeWebDto recipeWebDto) {
     return new RecipeResponse(recipeService.create(recipeWebDto.transferRecipe()));
+  }
+  
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler({MethodArgumentNotValidException.class})
+  public CreateExceptionResponse badRequest() {
+    return new CreateExceptionResponse("title, making_time, serves, ingredients, cost");
   }
 
 }
