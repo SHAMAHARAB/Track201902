@@ -17,10 +17,12 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -48,19 +50,24 @@ public class RecipeRepositoryMapperTest {
   
   @Autowired
   private DataSource dataSourceTest;
+  
+  private IDataSet targetDataSet;
+  
+  @Before
+  public void beforeRestDb() 
+      throws CannotGetJdbcConnectionException, DatabaseUnitException, SQLException {
+    DatabaseConnection targetConnection = 
+        new DatabaseConnection(DataSourceUtils.getConnection(dataSourceTest));
+    targetDataSet = targetConnection.createDataSet();
+    DatabaseOperation.DELETE_ALL.execute(targetConnection, targetDataSet);
+  }
 
   @Test
-  public void test() throws SQLException, DatabaseUnitException, MalformedURLException {
-    DatabaseConnection connection = 
-        new DatabaseConnection(DataSourceUtils.getConnection(dataSourceTest));
-    IDataSet databaseDataSet = connection.createDataSet();
-    
-    DatabaseOperation.DELETE_ALL.execute(connection, databaseDataSet);
-    
+  public void test_create() throws SQLException, DatabaseUnitException, MalformedURLException {    
     Recipe recipe = new Recipe("トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
     target.insert(recipe);
     
-    ITable actualTable = databaseDataSet.getTable("recipes");
+    ITable actualTable = targetDataSet.getTable("recipes");
     ITable filteredActualTable = 
         DefaultColumnFilter.excludedColumnsTable(
             actualTable, new String[]{"ID", "CREATED_AT", "UPDATED_AT"});
