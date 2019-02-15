@@ -33,5 +33,10 @@ public class RecipeServiceImplTest {
     Recipe actual = target.create(recipe);
     assertThat(actual, is(recipe));
   }
+  
+  @Test
+  public void test_findById() {
+    target.findById(1);
+  }
 
 }
