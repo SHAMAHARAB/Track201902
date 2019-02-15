@@ -68,9 +68,11 @@ public class RecipeControllerTest {
   
   @Test
   public void test_findById() throws Exception {
+    // prepare
     Recipe recipe = new Recipe("トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
     when(recipeService.findById(1)).thenReturn(recipe);
     
+    // test & verify
     mockMvc.perform(get("/recipes/1"))
         .andExpect(status().isOk())
         .andExpect(content().json(

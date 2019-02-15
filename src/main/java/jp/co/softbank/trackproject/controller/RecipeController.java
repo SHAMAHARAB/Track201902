@@ -26,6 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/recipes")
 public class RecipeController {
   
+  private static final String POST_MESSAGE = "Recipe successfully created!";
+
+  private static final String GET_MESSAGE = "Recipe details by id";
+  
   private RecipeService recipeService;
 
   /**
@@ -47,13 +51,13 @@ public class RecipeController {
   public RecipeResponse create(@RequestBody @Validated RecipeWebDto recipeWebDto) {
     return new RecipeResponse(
         recipeService.create(recipeWebDto.transferRecipe()), 
-        "Recipe successfully created!");
+        POST_MESSAGE);
   }
   
   @GetMapping("/{id}")
   public RecipeResponse findById(@PathVariable int id) {
     return new RecipeResponse(recipeService.findById(id),
-        "Recipe details by id");
+        GET_MESSAGE);
   }
   
   /**
