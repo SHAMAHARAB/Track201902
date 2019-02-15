@@ -13,7 +13,7 @@
   </select>
   
   <select id="selectAll" resultType="jp.co.softbank.trackproject.model.Recipe">
-    SELECT title, making_time AS makingTime, serves, ingredients, cost
+    SELECT id, title, making_time AS makingTime, serves, ingredients, cost
     FROM recipes
   </select>
 </mapper>
