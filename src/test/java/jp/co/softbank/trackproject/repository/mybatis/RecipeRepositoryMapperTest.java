@@ -1,18 +1,17 @@
 package jp.co.softbank.trackproject.repository.mybatis;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.junit.Assert.assertThat;
-
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 import java.net.MalformedURLException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javax.sql.DataSource;
+import java.util.Arrays;
+import java.util.List;
 
-import jp.co.softbank.trackproject.model.Recipe;
+import javax.sql.DataSource;
 
 import org.dbunit.Assertion;
 import org.dbunit.DatabaseUnitException;
@@ -37,6 +36,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+
+import jp.co.softbank.trackproject.model.Recipe;
 
 @MybatisTest
 @ContextConfiguration
@@ -119,4 +123,19 @@ public class RecipeRepositoryMapperTest {
     assertThat(actual, is(expected));
   }
 
+  @Test
+  @DatabaseSetup("get-test.xml")
+  public void test_selectAll() {    
+    // test
+    List<Recipe> actual = target.selectAll();
+    
+    // verify
+    List<Recipe> expected = Arrays.asList(
+        new Recipe("チキンカレー", "45分", "4人", "玉ねぎ,肉,スパイス", 1000),
+        new Recipe("オムライス", "30分", "2人", "玉ねぎ,卵,スパイス,醤油", 700),
+        new Recipe("トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450));
+    
+    assertThat(actual.size(), is(3));
+    assertThat(actual, is(expected));
+  }
 }
