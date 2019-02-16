@@ -52,7 +52,8 @@ public class RecipeServiceImpl implements RecipeService {
 
   @Override
   public Recipe updateById(int id, Recipe recipe) {
-    return null;
+    recipeRepository.updateById(id, recipe);
+    return recipe;
   }
 
   @Override

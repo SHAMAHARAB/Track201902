@@ -92,7 +92,15 @@ public class RecipeServiceImplTest {
   
   @Test
   public void test_update() {
-    Recipe recipe = new Recipe("トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
-    target.updateById(1, recipe);
+    // prepare
+    int id = 1;
+    Recipe expected = new Recipe("トマトスープレシピ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
+    doNothing().when(mockRepository).updateById(id, expected);
+    
+    // test
+    Recipe actual = target.updateById(id, expected);
+    
+    // verify
+    assertThat(actual, is(expected));
   }
 }
