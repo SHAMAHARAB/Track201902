@@ -107,7 +107,7 @@ public class RecipeRepositoryMapperTest {
             actualTable, new String[]{"ID", "CREATED_AT", "UPDATED_AT"});
     
     IDataSet expectedDataSet = new FlatXmlDataSetBuilder()
-        .build(RecipeRepositoryMapperTest.class.getResourceAsStream("recipe-create.xml"));
+        .build(RecipeRepositoryMapperTest.class.getResourceAsStream("recipe-one.xml"));
     ITable expectedTable = expectedDataSet.getTable("recipes");
     ITable filteredExpectedTable = 
         DefaultColumnFilter.excludedColumnsTable(
@@ -175,5 +175,33 @@ public class RecipeRepositoryMapperTest {
     
     assertThat(actualId, is(id));
     assertThat(actual, is(recipe));
+  }
+  
+  @Test
+  @DatabaseSetup("recipe-one.xml")
+  public void test_delete() throws DataSetException {
+    // test
+    boolean actual = target.deleteById(3);
+    
+    // verify
+    assertThat(actual, is(true));
+    
+    ITable actualTable = targetDataSet.getTable("recipes");
+    int recipeCount = actualTable.getRowCount();
+    assertThat(recipeCount, is(0));
+  }
+  
+  @Test
+  @DatabaseSetup("recipe-one.xml")
+  public void test_delete_fail() throws DataSetException {
+    // test
+    boolean actual = target.deleteById(120); // 120は、存在しないID
+    
+    // verify
+    assertThat(actual, is(false));
+    
+    ITable actualTable = targetDataSet.getTable("recipes");
+    int recipeCount = actualTable.getRowCount();
+    assertThat(recipeCount, is(1));
   }
 }
