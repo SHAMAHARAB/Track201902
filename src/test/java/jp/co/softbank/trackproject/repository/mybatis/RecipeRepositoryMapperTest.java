@@ -20,6 +20,7 @@ import jp.co.softbank.trackproject.model.Recipe;
 import org.dbunit.Assertion;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
+import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.filter.DefaultColumnFilter;
@@ -154,12 +155,25 @@ public class RecipeRepositoryMapperTest {
   
   @Test
   @DatabaseSetup("recipe-some-data.xml")
-  public void test_updateById() {
+  public void test_updateById() throws DataSetException {
     //prepare
     int id = 1;
     Recipe recipe = new Recipe("トマトスープレシピ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
     
     // test
     target.updateById(id, recipe);
+    
+    // verify
+    ITable actualTable = targetDataSet.getTable("recipes");
+    int actualId = (int) actualTable.getValue(0, "id");
+    Recipe actual = new Recipe(
+        (String) actualTable.getValue(0, "title"),
+        (String) actualTable.getValue(0, "making_time"),
+        (String) actualTable.getValue(0, "serves"),
+        (String) actualTable.getValue(0, "ingredients"),
+        (int) actualTable.getValue(0, "cost"));
+    
+    assertThat(actualId, is(id));
+    assertThat(actual, is(recipe));
   }
 }
