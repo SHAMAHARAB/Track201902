@@ -2,13 +2,17 @@ package jp.co.softbank.trackproject.controller;
 
 import jp.co.softbank.trackproject.client.dto.RecipeWebDto;
 import jp.co.softbank.trackproject.client.exception.CreateExceptionResponse;
+import jp.co.softbank.trackproject.client.exception.DeleteExceptionResponse;
 import jp.co.softbank.trackproject.client.response.AllRecipeResponse;
+import jp.co.softbank.trackproject.client.response.MessageResponse;
 import jp.co.softbank.trackproject.client.response.RecipeResponse;
+import jp.co.softbank.trackproject.exception.RecipeDeleteException;
 import jp.co.softbank.trackproject.service.RecipeService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -33,6 +37,8 @@ public class RecipeController {
   private static final String GET_MESSAGE = "Recipe details by id";
   
   private static final String PUT_MESSAGE = "Recipe successfully updated!";
+  
+  private static final String DELETE_MESSAGE = "Recipe successfully removed!";
   
   private RecipeService recipeService;
 
@@ -94,6 +100,19 @@ public class RecipeController {
   }
   
   /**
+   * 指定したレシピを削除します。
+   * 
+   * @param id 主キー
+   * @return 削除成功のメッセージ
+   */
+  @DeleteMapping("/{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public MessageResponse deleteById(@PathVariable int id) {
+    recipeService.deleteById(id);
+    return new MessageResponse(DELETE_MESSAGE);
+  }
+  
+  /**
    * レシピの登録に失敗した時のハンドリングを行います。
    * 
    * @return 登録失敗時に返却するCreateExceptionResponseクラス
@@ -102,6 +121,18 @@ public class RecipeController {
   @ExceptionHandler({MethodArgumentNotValidException.class})
   public CreateExceptionResponse badRequest() {
     return new CreateExceptionResponse("title, making_time, serves, ingredients, cost");
+  }
+  
+  /**
+   * レシピの削除に失敗した時のハンドリングを行います。
+   * 
+   * @param e RecipeDeleteException
+   * @return 削除失敗時に返却するDeleteExceptionResponseクラス
+   */
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  @ExceptionHandler({RecipeDeleteException.class})
+  public DeleteExceptionResponse notFoundDeleteRecipe(RecipeDeleteException e) {
+    return new DeleteExceptionResponse(e.getMessage());
   }
 
 }
