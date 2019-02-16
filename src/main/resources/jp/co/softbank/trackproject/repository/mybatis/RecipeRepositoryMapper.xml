@@ -16,4 +16,15 @@
     SELECT id, title, making_time AS makingTime, serves, ingredients, cost
     FROM recipes
   </select>
+  
+  <update id="updateById">
+    UPDATE recipes
+      SET title = #{recipe.title},
+        making_time = #{recipe.makingTime},
+        serves = #{recipe.serves},
+        ingredients = #{recipe.ingredients},
+        cost = #{recipe.cost},
+        updated_at = NOW()
+      WHERE id = #{id}
+  </update>
 </mapper>

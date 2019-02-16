@@ -151,4 +151,11 @@ public class RecipeRepositoryMapperTest {
     // verify
     assertThat(actual.size(), is(0));
   }
+  
+  @Test
+  public void test_updateById() {
+    int id = 1;
+    Recipe recipe = new Recipe("トマトスープレシピ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
+    target.updateById(id, recipe);
+  }
 }
