@@ -129,7 +129,10 @@ public class RecipeControllerTest {
   
   @Test
   public void test_deleteById() throws Exception {
+    // test & verify
     mockMvc.perform(delete("/recipes/1"))
-        .andExpect(status().isNoContent());
+        .andExpect(status().isNoContent())
+        .andExpect(content().json(
+            resource.content("delete_recipe-res.json"), true));
   }
 }

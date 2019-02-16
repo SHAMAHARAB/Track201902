@@ -36,6 +36,8 @@ public class RecipeController {
   
   private static final String PUT_MESSAGE = "Recipe successfully updated!";
   
+  private static final String DELETE_MESSAGE = "Recipe successfully removed!";
+  
   private RecipeService recipeService;
 
   /**
@@ -98,7 +100,8 @@ public class RecipeController {
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public MessageResponse deleteById(@PathVariable int id) {
-    return null;
+    recipeService.deleteById(id);
+    return new MessageResponse(DELETE_MESSAGE);
   }
   
   /**
