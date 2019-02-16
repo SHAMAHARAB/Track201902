@@ -60,6 +60,9 @@ public class RecipeServiceImpl implements RecipeService {
     return recipe;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void deleteById(int id) {
     if(!recipeRepository.deleteById(id)) {
