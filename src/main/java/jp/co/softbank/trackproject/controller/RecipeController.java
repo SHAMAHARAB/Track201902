@@ -99,6 +99,12 @@ public class RecipeController {
         PUT_MESSAGE);
   }
   
+  /**
+   * 指定したレシピを削除します。
+   * 
+   * @param id 主キー
+   * @return 削除成功のメッセージ
+   */
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public MessageResponse deleteById(@PathVariable int id) {
@@ -117,6 +123,12 @@ public class RecipeController {
     return new CreateExceptionResponse("title, making_time, serves, ingredients, cost");
   }
   
+  /**
+   * レシピの削除に失敗した時のハンドリングを行います。
+   * 
+   * @param e RecipeDeleteException
+   * @return 削除失敗時に返却するDeleteExceptionResponseクラス
+   */
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @ExceptionHandler({RecipeDeleteException.class})
   public DeleteExceptionResponse notFoundDeleteRecipe(RecipeDeleteException e) {
