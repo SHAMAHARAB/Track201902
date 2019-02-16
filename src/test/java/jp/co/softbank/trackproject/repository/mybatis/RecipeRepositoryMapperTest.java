@@ -190,4 +190,18 @@ public class RecipeRepositoryMapperTest {
     int recipeCount = actualTable.getRowCount();
     assertThat(recipeCount, is(0));
   }
+  
+  @Test
+  @DatabaseSetup("recipe-one.xml")
+  public void test_delete_fail() throws DataSetException {
+    // test
+    boolean actual = target.deleteById(120); // 120は、存在しないID
+    
+    // verify
+    assertThat(actual, is(false));
+    
+    ITable actualTable = targetDataSet.getTable("recipes");
+    int recipeCount = actualTable.getRowCount();
+    assertThat(recipeCount, is(1));
+  }
 }
