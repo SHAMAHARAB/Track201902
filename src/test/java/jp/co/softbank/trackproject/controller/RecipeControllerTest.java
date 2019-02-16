@@ -133,7 +133,7 @@ public class RecipeControllerTest {
   public void test_deleteById() throws Exception {
     // test & verify
     mockMvc.perform(delete("/recipes/1"))
-        .andExpect(status().isNoContent())
+        .andExpect(status().isOk())
         .andExpect(content().json(
             resource.content("delete_recipe-res.json"), true));
   }
@@ -145,7 +145,7 @@ public class RecipeControllerTest {
     
     // test & verify
     mockMvc.perform(delete("/recipes/120"))
-        .andExpect(status().isNotFound())
+        .andExpect(status().isOk())
         .andExpect(content().json(
             resource.content("delete_recipe_exception-res.json"), true));
   }
