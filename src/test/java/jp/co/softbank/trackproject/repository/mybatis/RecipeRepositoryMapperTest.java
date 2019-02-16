@@ -106,7 +106,7 @@ public class RecipeRepositoryMapperTest {
             actualTable, new String[]{"ID", "CREATED_AT", "UPDATED_AT"});
     
     IDataSet expectedDataSet = new FlatXmlDataSetBuilder()
-        .build(RecipeRepositoryMapperTest.class.getResourceAsStream("create-test.xml"));
+        .build(RecipeRepositoryMapperTest.class.getResourceAsStream("recipe-create.xml"));
     ITable expectedTable = expectedDataSet.getTable("recipes");
     ITable filteredExpectedTable = 
         DefaultColumnFilter.excludedColumnsTable(
@@ -116,7 +116,7 @@ public class RecipeRepositoryMapperTest {
   }
   
   @Test
-  @DatabaseSetup("get-test.xml")
+  @DatabaseSetup("recipe-some-data.xml")
   public void test_selectById() {    
     // test
     Recipe actual = target.selectById(1);
@@ -127,7 +127,7 @@ public class RecipeRepositoryMapperTest {
   }
 
   @Test
-  @DatabaseSetup("get-test.xml")
+  @DatabaseSetup("recipe-some-data.xml")
   public void test_selectAll() {    
     // test
     List<Recipe> actual = target.selectAll();
@@ -143,7 +143,7 @@ public class RecipeRepositoryMapperTest {
   }
   
   @Test
-  @DatabaseSetup("get-test-empty.xml")
+  @DatabaseSetup("recipe-empty.xml")
   public void test_selectAll_empty() {    
     // test
     List<Recipe> actual = target.selectAll();
@@ -153,9 +153,13 @@ public class RecipeRepositoryMapperTest {
   }
   
   @Test
+  @DatabaseSetup("recipe-some-data.xml")
   public void test_updateById() {
+    //prepare
     int id = 1;
     Recipe recipe = new Recipe("トマトスープレシピ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
+    
+    // test
     target.updateById(id, recipe);
   }
 }
