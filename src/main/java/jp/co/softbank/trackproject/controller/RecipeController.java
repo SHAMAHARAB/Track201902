@@ -80,6 +80,13 @@ public class RecipeController {
     return new AllRecipeResponse(recipeService.findAll());
   }
   
+  /**
+   * 指定したレシピを更新します。
+   * 
+   * @param id 主キー
+   * @param recipeWebDto RecipeWebDto
+   * @return 更新したレシピ
+   */
   @PatchMapping("/{id}")
   public RecipeResponse updateById(@PathVariable int id, @RequestBody RecipeWebDto recipeWebDto) {
     return new RecipeResponse(recipeService.updateById(id, recipeWebDto.transferRecipe()),
