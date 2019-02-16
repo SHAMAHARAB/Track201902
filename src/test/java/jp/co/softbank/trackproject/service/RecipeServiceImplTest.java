@@ -1,15 +1,19 @@
 package jp.co.softbank.trackproject.service;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import jp.co.softbank.trackproject.exception.RecipeDeleteException;
 import jp.co.softbank.trackproject.model.Recipe;
 import jp.co.softbank.trackproject.repository.RecipeRepository;
 
@@ -102,5 +106,35 @@ public class RecipeServiceImplTest {
     
     // verify
     assertThat(actual, is(expected));
+  }
+  
+  @Test
+  public void test_delete() {
+    // prepare
+    int id = 1;
+    when(mockRepository.deleteById(id)).thenReturn(true);
+    
+    // test
+    target.deleteById(id);
+    
+    // verify
+    verify(mockRepository, times(1)).deleteById(id);
+  }
+  
+  @Test
+  public void test_delete_exception() {
+    // prepare
+    int id = 1;
+    when(mockRepository.deleteById(id)).thenReturn(false);
+    
+    // test & verify
+    try {
+      target.deleteById(id);
+      fail("発生すべき例外が発生していない");
+    } catch(RecipeDeleteException e) {
+      assertThat(e.getMessage(), is("No Recipe found"));
+    }
+    
+    
   }
 }

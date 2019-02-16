@@ -41,6 +41,6 @@ public interface RecipeRepository {
    */
   void updateById(int id, Recipe recipe);
 
-  void deleteById(int id);
+  boolean deleteById(int id);
   
 }
