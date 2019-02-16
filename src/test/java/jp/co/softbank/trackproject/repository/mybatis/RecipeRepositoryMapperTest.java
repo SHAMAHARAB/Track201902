@@ -20,6 +20,7 @@ import jp.co.softbank.trackproject.model.Recipe;
 import org.dbunit.Assertion;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
+import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.filter.DefaultColumnFilter;
@@ -106,7 +107,7 @@ public class RecipeRepositoryMapperTest {
             actualTable, new String[]{"ID", "CREATED_AT", "UPDATED_AT"});
     
     IDataSet expectedDataSet = new FlatXmlDataSetBuilder()
-        .build(RecipeRepositoryMapperTest.class.getResourceAsStream("create-test.xml"));
+        .build(RecipeRepositoryMapperTest.class.getResourceAsStream("recipe-create.xml"));
     ITable expectedTable = expectedDataSet.getTable("recipes");
     ITable filteredExpectedTable = 
         DefaultColumnFilter.excludedColumnsTable(
@@ -116,7 +117,7 @@ public class RecipeRepositoryMapperTest {
   }
   
   @Test
-  @DatabaseSetup("get-test.xml")
+  @DatabaseSetup("recipe-some-data.xml")
   public void test_selectById() {    
     // test
     Recipe actual = target.selectById(1);
@@ -127,7 +128,7 @@ public class RecipeRepositoryMapperTest {
   }
 
   @Test
-  @DatabaseSetup("get-test.xml")
+  @DatabaseSetup("recipe-some-data.xml")
   public void test_selectAll() {    
     // test
     List<Recipe> actual = target.selectAll();
@@ -143,12 +144,36 @@ public class RecipeRepositoryMapperTest {
   }
   
   @Test
-  @DatabaseSetup("get-test-empty.xml")
+  @DatabaseSetup("recipe-empty.xml")
   public void test_selectAll_empty() {    
     // test
     List<Recipe> actual = target.selectAll();
     
     // verify
     assertThat(actual.size(), is(0));
+  }
+  
+  @Test
+  @DatabaseSetup("recipe-some-data.xml")
+  public void test_updateById() throws DataSetException {
+    //prepare
+    int id = 1;
+    Recipe recipe = new Recipe("トマトスープレシピ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
+    
+    // test
+    target.updateById(id, recipe);
+    
+    // verify
+    ITable actualTable = targetDataSet.getTable("recipes");
+    int actualId = (int) actualTable.getValue(0, "id");
+    Recipe actual = new Recipe(
+        (String) actualTable.getValue(0, "title"),
+        (String) actualTable.getValue(0, "making_time"),
+        (String) actualTable.getValue(0, "serves"),
+        (String) actualTable.getValue(0, "ingredients"),
+        (int) actualTable.getValue(0, "cost"));
+    
+    assertThat(actualId, is(id));
+    assertThat(actual, is(recipe));
   }
 }
