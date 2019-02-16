@@ -1,6 +1,7 @@
 package jp.co.softbank.trackproject.controller;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -124,5 +125,11 @@ public class RecipeControllerTest {
         .andExpect(status().isOk())
         .andExpect(content().json(
             resource.content("put_recipe-res.json"), true));
+  }
+  
+  @Test
+  public void test_deleteById() throws Exception {
+    mockMvc.perform(delete("/recipes/1"))
+        .andExpect(status().isNoContent());
   }
 }
