@@ -32,6 +32,8 @@ public class RecipeController {
 
   private static final String GET_MESSAGE = "Recipe details by id";
   
+  private static final String PUT_MESSAGE = "Recipe successfully updated!";
+  
   private RecipeService recipeService;
 
   /**
@@ -80,7 +82,8 @@ public class RecipeController {
   
   @PatchMapping("/{id}")
   public RecipeResponse updateById(@PathVariable int id, @RequestBody RecipeWebDto recipeWebDto) {
-    return null;
+    return new RecipeResponse(recipeService.updateById(id, recipeWebDto.transferRecipe()),
+        PUT_MESSAGE);
   }
   
   /**
