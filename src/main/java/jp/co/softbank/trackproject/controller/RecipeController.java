@@ -119,8 +119,8 @@ public class RecipeController {
   
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @ExceptionHandler({RecipeDeleteException.class})
-  public DeleteExceptionResponse notFoundDeleteRecipe() {
-    return new DeleteExceptionResponse();
+  public DeleteExceptionResponse notFoundDeleteRecipe(RecipeDeleteException e) {
+    return new DeleteExceptionResponse(e.getMessage());
   }
 
 }

@@ -12,4 +12,8 @@ public class DeleteExceptionResponse extends MessageResponse {
     super(NOT_FOUND_EXCEPTION_MESSAGE);
   }
   
+  public DeleteExceptionResponse(String message) {
+    super(message);
+  }
+  
 }
