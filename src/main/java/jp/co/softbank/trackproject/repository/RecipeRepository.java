@@ -33,6 +33,12 @@ public interface RecipeRepository {
    */
   List<Recipe> selectAll();
 
+  /**
+   * 指定したレシピを更新します。
+   * 
+   * @param id 主キー
+   * @param recipe 更新レシピ
+   */
   void updateById(int id, Recipe recipe);
 
   void deleteById(int id);

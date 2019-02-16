@@ -2,6 +2,7 @@ package jp.co.softbank.trackproject.controller;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -107,5 +108,21 @@ public class RecipeControllerTest {
     mockMvc.perform(get("/recipes/"))
         .andExpect(status().isOk())
         .andExpect(content().json("{}"));
+  }
+  
+  @Test
+  public void test_updateById() throws IOException, Exception {
+    // prepare
+    Recipe recipe = new Recipe("トマトスープレシピ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
+    RecipeWebDto requstForm = new RecipeWebDto(recipe);
+    when(recipeService.updateById(1, recipe)).thenReturn(recipe);
+    
+    // test & verify
+    mockMvc.perform(patch("/recipes/1").contentType(MediaType.APPLICATION_JSON_UTF8)
+        .content(new ObjectMapper().writeValueAsString(requstForm))
+        )
+        .andExpect(status().isOk())
+        .andExpect(content().json(
+            resource.content("put_recipe-res.json"), true));
   }
 }

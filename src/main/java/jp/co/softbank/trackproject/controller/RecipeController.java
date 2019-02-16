@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,8 @@ public class RecipeController {
   private static final String POST_MESSAGE = "Recipe successfully created!";
 
   private static final String GET_MESSAGE = "Recipe details by id";
+  
+  private static final String PUT_MESSAGE = "Recipe successfully updated!";
   
   private RecipeService recipeService;
 
@@ -75,6 +78,19 @@ public class RecipeController {
   @GetMapping
   public AllRecipeResponse findAll() {
     return new AllRecipeResponse(recipeService.findAll());
+  }
+  
+  /**
+   * 指定したレシピを更新します。
+   * 
+   * @param id 主キー
+   * @param recipeWebDto RecipeWebDto
+   * @return 更新したレシピ
+   */
+  @PatchMapping("/{id}")
+  public RecipeResponse updateById(@PathVariable int id, @RequestBody RecipeWebDto recipeWebDto) {
+    return new RecipeResponse(recipeService.updateById(id, recipeWebDto.transferRecipe()),
+        PUT_MESSAGE);
   }
   
   /**
