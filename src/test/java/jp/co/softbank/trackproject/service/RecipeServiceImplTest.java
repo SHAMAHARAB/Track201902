@@ -110,12 +110,23 @@ public class RecipeServiceImplTest {
   public void test_delete() {
     // prepare
     int id = 1;
-    doNothing().when(mockRepository).deleteById(id);
+    when(mockRepository.deleteById(id)).thenReturn(true);
     
     // test
     target.deleteById(id);
     
     // verify
     verify(mockRepository, times(1)).deleteById(id);
+  }
+  
+  @Test
+  public void test_delete_exception() {
+    // prepare
+    int id = 1;
+    when(mockRepository.deleteById(id)).thenReturn(false);
+    
+    // test
+    target.deleteById(id);
+    
   }
 }
