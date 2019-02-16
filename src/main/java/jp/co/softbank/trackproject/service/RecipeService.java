@@ -34,6 +34,13 @@ public interface RecipeService {
    */
   List<Recipe> findAll();
 
+  /**
+   * 指定したレシピを更新します。
+   * 
+   * @param id 主キー
+   * @param recipe 更新レシピ
+   * @return 更新されたレシピ
+   */
   Recipe updateById(int id, Recipe recipe);
 
   void deleteById(int id);

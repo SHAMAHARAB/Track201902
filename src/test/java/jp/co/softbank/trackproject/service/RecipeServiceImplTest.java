@@ -89,4 +89,18 @@ public class RecipeServiceImplTest {
     assertThat(actual.size(), is(0));
     assertThat(actual, is(Collections.emptyList()));
   }
+  
+  @Test
+  public void test_update() {
+    // prepare
+    int id = 1;
+    Recipe expected = new Recipe("トマトスープレシピ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
+    doNothing().when(mockRepository).updateById(id, expected);
+    
+    // test
+    Recipe actual = target.updateById(id, expected);
+    
+    // verify
+    assertThat(actual, is(expected));
+  }
 }
