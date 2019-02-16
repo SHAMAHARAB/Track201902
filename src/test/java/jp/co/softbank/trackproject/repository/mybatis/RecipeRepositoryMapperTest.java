@@ -176,4 +176,9 @@ public class RecipeRepositoryMapperTest {
     assertThat(actualId, is(id));
     assertThat(actual, is(recipe));
   }
+  
+  @Test
+  public void test_delete() {
+    target.deleteById(1);
+  }
 }
