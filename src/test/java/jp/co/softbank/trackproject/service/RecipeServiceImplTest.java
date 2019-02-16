@@ -4,6 +4,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -106,6 +108,14 @@ public class RecipeServiceImplTest {
   
   @Test
   public void test_delete() {
-    target.deleteById(1);
+    // prepare
+    int id = 1;
+    doNothing().when(mockRepository).deleteById(id);
+    
+    // test
+    target.deleteById(id);
+    
+    // verify
+    verify(mockRepository, times(1)).deleteById(id);
   }
 }
