@@ -179,8 +179,15 @@ public class RecipeRepositoryMapperTest {
   
   @Test
   @DatabaseSetup("recipe-one.xml")
-  public void test_delete() {
-    // prepare
-    target.deleteById(3);
+  public void test_delete() throws DataSetException {
+    // test
+    boolean actual = target.deleteById(3);
+    
+    // verify
+    assertThat(actual, is(true));
+    
+    ITable actualTable = targetDataSet.getTable("recipes");
+    int recipeCount = actualTable.getRowCount();
+    assertThat(recipeCount, is(0));
   }
 }
