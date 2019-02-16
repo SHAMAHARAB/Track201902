@@ -50,6 +50,9 @@ public class RecipeServiceImpl implements RecipeService {
     return recipeRepository.selectAll();
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Recipe updateById(int id, Recipe recipe) {
     recipeRepository.updateById(id, recipe);
