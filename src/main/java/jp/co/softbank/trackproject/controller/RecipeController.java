@@ -106,7 +106,6 @@ public class RecipeController {
    * @return 削除成功のメッセージ
    */
   @DeleteMapping("/{id}")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
   public MessageResponse deleteById(@PathVariable int id) {
     recipeService.deleteById(id);
     return new MessageResponse(DELETE_MESSAGE);
@@ -129,7 +128,7 @@ public class RecipeController {
    * @param e RecipeDeleteException
    * @return 削除失敗時に返却するDeleteExceptionResponseクラス
    */
-  @ResponseStatus(HttpStatus.NOT_FOUND)
+  @ResponseStatus(HttpStatus.OK)
   @ExceptionHandler({RecipeDeleteException.class})
   public DeleteExceptionResponse notFoundDeleteRecipe(RecipeDeleteException e) {
     return new DeleteExceptionResponse(e.getMessage());
