@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -75,6 +76,11 @@ public class RecipeController {
   @GetMapping
   public AllRecipeResponse findAll() {
     return new AllRecipeResponse(recipeService.findAll());
+  }
+  
+  @PatchMapping("/{id}")
+  public RecipeResponse updateById(@PathVariable int id, @RequestBody RecipeWebDto recipeWebDto) {
+    return null;
   }
   
   /**
