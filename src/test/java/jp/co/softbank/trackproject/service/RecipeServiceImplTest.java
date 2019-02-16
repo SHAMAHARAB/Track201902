@@ -89,4 +89,10 @@ public class RecipeServiceImplTest {
     assertThat(actual.size(), is(0));
     assertThat(actual, is(Collections.emptyList()));
   }
+  
+  @Test
+  public void test_update() {
+    Recipe recipe = new Recipe("トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
+    target.updateById(1, recipe);
+  }
 }
