@@ -1,5 +1,6 @@
 package jp.co.softbank.trackproject.controller;
 
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -17,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 import jp.co.softbank.trackproject.client.dto.RecipeWebDto;
+import jp.co.softbank.trackproject.exception.RecipeDeleteException;
 import jp.co.softbank.trackproject.model.Recipe;
 import jp.co.softbank.trackproject.service.RecipeService;
 import jp.co.softbank.trackproject.tool.ResourceLoadHelper;
@@ -134,5 +136,17 @@ public class RecipeControllerTest {
         .andExpect(status().isNoContent())
         .andExpect(content().json(
             resource.content("delete_recipe-res.json"), true));
+  }
+  
+  @Test
+  public void test_deleteById_exception() throws Exception {
+    // prepare
+    doThrow(new RecipeDeleteException("No Recipe found")).when(recipeService).deleteById(120);
+    
+    // test & verify
+    mockMvc.perform(delete("/recipes/120"))
+        .andExpect(status().isNotFound())
+        .andExpect(content().json(
+            resource.content("delete_recipe_exception-res.json"), true));
   }
 }

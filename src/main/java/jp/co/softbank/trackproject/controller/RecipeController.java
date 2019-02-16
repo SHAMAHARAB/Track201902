@@ -2,9 +2,11 @@ package jp.co.softbank.trackproject.controller;
 
 import jp.co.softbank.trackproject.client.dto.RecipeWebDto;
 import jp.co.softbank.trackproject.client.exception.CreateExceptionResponse;
+import jp.co.softbank.trackproject.client.exception.DeleteExceptionResponse;
 import jp.co.softbank.trackproject.client.response.AllRecipeResponse;
 import jp.co.softbank.trackproject.client.response.MessageResponse;
 import jp.co.softbank.trackproject.client.response.RecipeResponse;
+import jp.co.softbank.trackproject.exception.RecipeDeleteException;
 import jp.co.softbank.trackproject.service.RecipeService;
 
 import org.springframework.http.HttpStatus;
@@ -113,6 +115,12 @@ public class RecipeController {
   @ExceptionHandler({MethodArgumentNotValidException.class})
   public CreateExceptionResponse badRequest() {
     return new CreateExceptionResponse("title, making_time, serves, ingredients, cost");
+  }
+  
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  @ExceptionHandler({RecipeDeleteException.class})
+  public DeleteExceptionResponse notFoundDeleteRecipe() {
+    return new DeleteExceptionResponse();
   }
 
 }
