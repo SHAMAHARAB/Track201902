@@ -107,7 +107,7 @@ public class RecipeRepositoryMapperTest {
             actualTable, new String[]{"ID", "CREATED_AT", "UPDATED_AT"});
     
     IDataSet expectedDataSet = new FlatXmlDataSetBuilder()
-        .build(RecipeRepositoryMapperTest.class.getResourceAsStream("recipe-create.xml"));
+        .build(RecipeRepositoryMapperTest.class.getResourceAsStream("recipe-one.xml"));
     ITable expectedTable = expectedDataSet.getTable("recipes");
     ITable filteredExpectedTable = 
         DefaultColumnFilter.excludedColumnsTable(
@@ -178,7 +178,9 @@ public class RecipeRepositoryMapperTest {
   }
   
   @Test
+  @DatabaseSetup("recipe-one.xml")
   public void test_delete() {
-    target.deleteById(1);
+    // prepare
+    target.deleteById(3);
   }
 }
