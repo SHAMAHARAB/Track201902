@@ -103,4 +103,9 @@ public class RecipeServiceImplTest {
     // verify
     assertThat(actual, is(expected));
   }
+  
+  @Test
+  public void test_delete() {
+    target.deleteById(1);
+  }
 }
