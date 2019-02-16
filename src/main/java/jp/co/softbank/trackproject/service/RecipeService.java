@@ -43,5 +43,10 @@ public interface RecipeService {
    */
   Recipe updateById(int id, Recipe recipe);
 
+  /**
+   * 指定したレシピを削除します。
+   * 
+   * @param id 主キー
+   */
   void deleteById(int id);
 }

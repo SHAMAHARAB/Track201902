@@ -41,6 +41,12 @@ public interface RecipeRepository {
    */
   void updateById(int id, Recipe recipe);
 
-  void deleteById(int id);
+  /**
+   * 指定したレシピを削除します。
+   * 
+   * @param id 主キー
+   * @return テーブルに１レコード以上の反映があったかの真偽値
+   */
+  boolean deleteById(int id);
   
 }

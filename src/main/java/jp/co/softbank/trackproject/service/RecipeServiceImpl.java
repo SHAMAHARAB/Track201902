@@ -2,6 +2,7 @@ package jp.co.softbank.trackproject.service;
 
 import java.util.List;
 
+import jp.co.softbank.trackproject.exception.RecipeDeleteException;
 import jp.co.softbank.trackproject.model.Recipe;
 import jp.co.softbank.trackproject.repository.RecipeRepository;
 
@@ -59,8 +60,14 @@ public class RecipeServiceImpl implements RecipeService {
     return recipe;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void deleteById(int id) {
+    if(!recipeRepository.deleteById(id)) {
+      throw new RecipeDeleteException("No Recipe found");
+    }
   }
 
 }
