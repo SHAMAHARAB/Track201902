@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import jp.co.softbank.trackproject.client.dto.RecipeWebDto;
 import jp.co.softbank.trackproject.client.exception.RecipeCreateExceptionResponse;
 import jp.co.softbank.trackproject.client.exception.RecipeDeleteExceptionResponse;
-import jp.co.softbank.trackproject.client.response.AllRecipeResponse;
 import jp.co.softbank.trackproject.client.response.MessageResponse;
+import jp.co.softbank.trackproject.client.response.RecipeListResponse;
 import jp.co.softbank.trackproject.client.response.RecipeResponse;
 import jp.co.softbank.trackproject.exception.RecipeDeleteException;
 import jp.co.softbank.trackproject.service.RecipeService;
@@ -87,8 +87,8 @@ public class RecipeController {
    * @return 全てのレシピ
    */
   @GetMapping
-  public AllRecipeResponse findAll() {
-    return new AllRecipeResponse(recipeService.findAll());
+  public RecipeListResponse findAll() {
+    return new RecipeListResponse(recipeService.findAll());
   }
   
   /**
