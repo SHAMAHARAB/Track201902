@@ -136,6 +136,22 @@ public class RecipeRepositoryMapperTest {
   }
   
   @Test
+  @DatabaseSetup("recipe-some-data-order-random.xml")
+  public void test_selectAll_testOrder() {    
+    // test
+    List<Recipe> actual = target.selectAll();
+    
+    // verify
+    List<Recipe> expected = Arrays.asList(
+        new Recipe(1, "チキンカレー", "45分", "4人", "玉ねぎ,肉,スパイス", 1000),
+        new Recipe(2, "オムライス", "30分", "2人", "玉ねぎ,卵,スパイス,醤油", 700),
+        new Recipe(3, "トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450));
+    
+    assertThat(actual.size(), is(3));
+    assertThat(actual, is(expected));
+  }
+  
+  @Test
   @DatabaseSetup("recipe-empty.xml")
   public void test_selectAll_empty() {    
     // test
