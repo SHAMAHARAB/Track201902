@@ -3,7 +3,6 @@ package jp.co.softbank.trackproject.client.dto;
 import javax.validation.constraints.NotEmpty;
 
 import jp.co.softbank.trackproject.model.Recipe;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

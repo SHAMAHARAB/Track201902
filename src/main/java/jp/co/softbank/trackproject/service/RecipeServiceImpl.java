@@ -65,7 +65,7 @@ public class RecipeServiceImpl implements RecipeService {
    */
   @Override
   public void deleteById(int id) {
-    if(!recipeRepository.deleteById(id)) {
+    if (!recipeRepository.deleteById(id)) {
       throw new RecipeDeleteException("No Recipe found");
     }
   }
