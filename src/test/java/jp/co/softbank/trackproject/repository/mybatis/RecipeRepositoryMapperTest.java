@@ -26,7 +26,6 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,36 +68,29 @@ public class RecipeRepositoryMapperTest {
   
   private static final String TABLE_NAME = "recipes";
   
-  private int startSeqId;
-  
   @Before
   public void beforeRestDb() 
       throws CannotGetJdbcConnectionException, DatabaseUnitException, SQLException {
     targetConnection = new DatabaseConnection(DataSourceUtils.getConnection(dataSourceTest));
     targetDataSet = targetConnection.createDataSet();
-    Statement statement = DataSourceUtils.getConnection(dataSourceTest).createStatement();
-    ResultSet rs = statement.executeQuery("(select max(id) as id from " + TABLE_NAME + ")");
-    rs.next();
-    startSeqId = rs.getInt("id");
-  }
-  
-  @After
-  public void afterRestSeq() 
-      throws CannotGetJdbcConnectionException, DatabaseUnitException, SQLException {
-    if (startSeqId > 0) {
-      Statement statement = DataSourceUtils.getConnection(dataSourceTest).createStatement();
-      statement.executeQuery("select setval('" + SEQ_NAME + "', " + startSeqId + ")");
-    }
   }
 
   @Test
   public void test_insert() throws SQLException, DatabaseUnitException, MalformedURLException {    
     // prepare
+    Statement statement = DataSourceUtils.getConnection(dataSourceTest).createStatement();
+    ResultSet rs = statement.executeQuery("(select max(id) as id from " + TABLE_NAME + ")");
+    rs.next();
+    int startSeqId = rs.getInt("id");
     DatabaseOperation.DELETE_ALL.execute(targetConnection, targetDataSet);
     Recipe recipe = new Recipe("トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
     
     // test
     target.insert(recipe);
+    
+    // reset seqId
+    statement = DataSourceUtils.getConnection(dataSourceTest).createStatement();
+    statement.executeQuery("select setval('" + SEQ_NAME + "', " + startSeqId + ")");
     
     // verify
     ITable actualTable = targetDataSet.getTable("recipes");
