@@ -26,7 +26,6 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,36 +68,29 @@ public class RecipeRepositoryMapperTest {
   
   private static final String TABLE_NAME = "recipes";
   
-  private int startSeqId;
-  
   @Before
   public void beforeRestDb() 
       throws CannotGetJdbcConnectionException, DatabaseUnitException, SQLException {
     targetConnection = new DatabaseConnection(DataSourceUtils.getConnection(dataSourceTest));
     targetDataSet = targetConnection.createDataSet();
-    Statement statement = DataSourceUtils.getConnection(dataSourceTest).createStatement();
-    ResultSet rs = statement.executeQuery("(select max(id) as id from " + TABLE_NAME + ")");
-    rs.next();
-    startSeqId = rs.getInt("id");
-  }
-  
-  @After
-  public void afterRestSeq() 
-      throws CannotGetJdbcConnectionException, DatabaseUnitException, SQLException {
-    if (startSeqId > 0) {
-      Statement statement = DataSourceUtils.getConnection(dataSourceTest).createStatement();
-      statement.executeQuery("select setval('" + SEQ_NAME + "', " + startSeqId + ")");
-    }
   }
 
   @Test
   public void test_insert() throws SQLException, DatabaseUnitException, MalformedURLException {    
     // prepare
+    Statement statement = DataSourceUtils.getConnection(dataSourceTest).createStatement();
+    ResultSet rs = statement.executeQuery("(select max(id) as id from " + TABLE_NAME + ")");
+    rs.next();
+    int startSeqId = rs.getInt("id");
     DatabaseOperation.DELETE_ALL.execute(targetConnection, targetDataSet);
     Recipe recipe = new Recipe("トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450);
     
     // test
     target.insert(recipe);
+    
+    // reset seqId
+    statement = DataSourceUtils.getConnection(dataSourceTest).createStatement();
+    statement.executeQuery("select setval('" + SEQ_NAME + "', " + startSeqId + ")");
     
     // verify
     ITable actualTable = targetDataSet.getTable("recipes");
@@ -130,6 +122,22 @@ public class RecipeRepositoryMapperTest {
   @Test
   @DatabaseSetup("recipe-some-data.xml")
   public void test_selectAll() {    
+    // test
+    List<Recipe> actual = target.selectAll();
+    
+    // verify
+    List<Recipe> expected = Arrays.asList(
+        new Recipe(1, "チキンカレー", "45分", "4人", "玉ねぎ,肉,スパイス", 1000),
+        new Recipe(2, "オムライス", "30分", "2人", "玉ねぎ,卵,スパイス,醤油", 700),
+        new Recipe(3, "トマトスープ", "15分", "5人", "玉ねぎ, トマト, スパイス, 水", 450));
+    
+    assertThat(actual.size(), is(3));
+    assertThat(actual, is(expected));
+  }
+  
+  @Test
+  @DatabaseSetup("recipe-some-data-order-random.xml")
+  public void test_selectAll_testOrder() {    
     // test
     List<Recipe> actual = target.selectAll();
     

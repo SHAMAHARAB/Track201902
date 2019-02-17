@@ -1,15 +1,20 @@
 package jp.co.softbank.trackproject.controller;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import jp.co.softbank.trackproject.client.dto.RecipeWebDto;
-import jp.co.softbank.trackproject.client.exception.CreateExceptionResponse;
-import jp.co.softbank.trackproject.client.exception.DeleteExceptionResponse;
-import jp.co.softbank.trackproject.client.response.AllRecipeResponse;
+import jp.co.softbank.trackproject.client.exception.RecipeCreateExceptionResponse;
+import jp.co.softbank.trackproject.client.exception.RecipeDeleteExceptionResponse;
 import jp.co.softbank.trackproject.client.response.MessageResponse;
+import jp.co.softbank.trackproject.client.response.RecipeListResponse;
 import jp.co.softbank.trackproject.client.response.RecipeResponse;
 import jp.co.softbank.trackproject.exception.RecipeDeleteException;
 import jp.co.softbank.trackproject.service.RecipeService;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -55,7 +60,7 @@ public class RecipeController {
    * レシピを作成します。
    * 
    * @param recipeWebDto RecipeWebDto
-   * @return 登録成功時に返却するRecipeResponseクラス
+   * @return 登録したレシピ
    */
   @PostMapping
   public RecipeResponse create(@RequestBody @Validated RecipeWebDto recipeWebDto) {
@@ -68,7 +73,7 @@ public class RecipeController {
    * 指定したレシピ一つを返します。
    * 
    * @param id 主キー
-   * @return idで指定したレシピ
+   * @return 指定したレシピ
    */
   @GetMapping("/{id}")
   public RecipeResponse findById(@PathVariable int id) {
@@ -77,13 +82,13 @@ public class RecipeController {
   }
   
   /**
-   * 全てのレシピ一つを返します。
+   * 全てのレシピを返します。
    * 
    * @return 全てのレシピ
    */
   @GetMapping
-  public AllRecipeResponse findAll() {
-    return new AllRecipeResponse(recipeService.findAll());
+  public RecipeListResponse findAll() {
+    return new RecipeListResponse(recipeService.findAll());
   }
   
   /**
@@ -114,24 +119,42 @@ public class RecipeController {
   /**
    * レシピの登録に失敗した時のハンドリングを行います。
    * 
-   * @return 登録失敗時に返却するCreateExceptionResponseクラス
+   * @return 登録の失敗を知らせるレスポンス
+   * @throws MethodArgumentNotValidException MethodArgumentNotValidException
    */
   @ResponseStatus(HttpStatus.OK)
   @ExceptionHandler({MethodArgumentNotValidException.class})
-  public CreateExceptionResponse badRequest() {
-    return new CreateExceptionResponse("title, making_time, serves, ingredients, cost");
+  public RecipeCreateExceptionResponse badRequest(MethodArgumentNotValidException e)
+      throws MethodArgumentNotValidException {
+    if (e.getParameter().getMethod().getName().equals("create")) {
+      // 発生したバリデーションフィールドのリスト
+      List<String> validateFields = e.getBindingResult().getFieldErrors()
+          .stream()
+          .map(FieldError::getField)
+          .collect(Collectors.toList());
+      
+      // Responseのメッセージに渡すための文字列を作成
+      String validMessage = 
+          Arrays.asList("title", "making_time", "serves", "ingredients", "cost")
+          .stream()
+          .filter(s -> validateFields.contains(s))
+          .collect(Collectors.joining(", "));
+      
+      return new RecipeCreateExceptionResponse(validMessage);
+    }
+    throw e;
   }
   
   /**
    * レシピの削除に失敗した時のハンドリングを行います。
    * 
    * @param e RecipeDeleteException
-   * @return 削除失敗時に返却するDeleteExceptionResponseクラス
+   * @return 削除の失敗を知らせるレスポンス
    */
   @ResponseStatus(HttpStatus.OK)
   @ExceptionHandler({RecipeDeleteException.class})
-  public DeleteExceptionResponse notFoundDeleteRecipe(RecipeDeleteException e) {
-    return new DeleteExceptionResponse(e.getMessage());
+  public RecipeDeleteExceptionResponse notFoundDeleteRecipe(RecipeDeleteException e) {
+    return new RecipeDeleteExceptionResponse(e.getMessage());
   }
 
 }

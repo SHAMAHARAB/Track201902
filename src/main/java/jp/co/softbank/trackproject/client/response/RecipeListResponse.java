@@ -13,7 +13,7 @@ import lombok.Data;
  *
  */
 @Data
-public class AllRecipeResponse {
+public class RecipeListResponse {
   private List<RecipeWithIdWebDto> recipes;
   
   /**
@@ -21,7 +21,7 @@ public class AllRecipeResponse {
    * 
    * @param recipes レシピの一覧
    */
-  public AllRecipeResponse(List<Recipe> recipes) {
+  public RecipeListResponse(List<Recipe> recipes) {
     this.recipes = recipes.stream()
         .map(RecipeWithIdWebDto::new)
         .collect(Collectors.toList());

@@ -9,7 +9,9 @@ import lombok.Data;
  *
  */
 @Data
-public class CreateExceptionResponse extends MessageResponse {
+public class RecipeCreateExceptionResponse extends MessageResponse {
+  
+  private static final String DAFAULT_MESSAGE = "Recipe creation failed!";
   
   private String required;
   
@@ -18,8 +20,8 @@ public class CreateExceptionResponse extends MessageResponse {
    * 
    * @param required 必須項目を知らせるメッセージ
    */
-  public CreateExceptionResponse(String required) {
-    super("Recipe creation failed!");
+  public RecipeCreateExceptionResponse(String required) {
+    super(DAFAULT_MESSAGE);
     this.required = required;
   }
 }

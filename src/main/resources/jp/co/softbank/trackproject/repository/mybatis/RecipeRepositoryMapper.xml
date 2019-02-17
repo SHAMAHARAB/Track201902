@@ -4,6 +4,9 @@
   <insert id="insert" parameterType="jp.co.softbank.trackproject.model.Recipe">
     INSERT INTO recipes (title, making_time, serves, ingredients, cost, created_at, updated_at)
     VALUES (#{title}, #{makingTime}, #{serves}, #{ingredients}, #{cost}, NOW(), NOW())
+    <selectKey resultType="int" keyProperty="id" order="AFTER">
+      SELECT currval('recipes_id_seq') 
+    </selectKey>
   </insert>
   
   <select id="selectById" resultType="jp.co.softbank.trackproject.model.Recipe" parameterType="integer">
@@ -15,6 +18,7 @@
   <select id="selectAll" resultType="jp.co.softbank.trackproject.model.Recipe">
     SELECT id, title, making_time AS makingTime, serves, ingredients, cost
     FROM recipes
+    ORDER BY id
   </select>
   
   <update id="updateById">

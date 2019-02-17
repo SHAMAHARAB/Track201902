@@ -1,18 +1,14 @@
 package jp.co.softbank.trackproject.client.dto;
 
 import jp.co.softbank.trackproject.model.Recipe;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
- * クライアントからのリクエスト、レスポンスを受けつけるDtoクラスです。
+ * クライアントへID付きのレシピをレスポンスするためのDtoクラスです。
  * @author H.Hamahara
  *
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class RecipeWithIdWebDto {
 
   private int id;
