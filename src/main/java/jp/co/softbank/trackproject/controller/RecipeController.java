@@ -60,7 +60,7 @@ public class RecipeController {
    * レシピを作成します。
    * 
    * @param recipeWebDto RecipeWebDto
-   * @return 登録成功時に返却するRecipeResponseクラス
+   * @return 登録したレシピ
    */
   @PostMapping
   public RecipeResponse create(@RequestBody @Validated RecipeWebDto recipeWebDto) {
@@ -73,7 +73,7 @@ public class RecipeController {
    * 指定したレシピ一つを返します。
    * 
    * @param id 主キー
-   * @return idで指定したレシピ
+   * @return 指定したレシピ
    */
   @GetMapping("/{id}")
   public RecipeResponse findById(@PathVariable int id) {
@@ -82,7 +82,7 @@ public class RecipeController {
   }
   
   /**
-   * 全てのレシピ一つを返します。
+   * 全てのレシピを返します。
    * 
    * @return 全てのレシピ
    */
@@ -119,7 +119,7 @@ public class RecipeController {
   /**
    * レシピの登録に失敗した時のハンドリングを行います。
    * 
-   * @return 登録失敗時に返却するRecipeCreateExceptionResponseクラス
+   * @return 登録の失敗を知らせるレスポンス
    * @throws MethodArgumentNotValidException MethodArgumentNotValidException
    */
   @ResponseStatus(HttpStatus.OK)
@@ -149,7 +149,7 @@ public class RecipeController {
    * レシピの削除に失敗した時のハンドリングを行います。
    * 
    * @param e RecipeDeleteException
-   * @return 削除失敗時に返却するRecipeDeleteExceptionResponseクラス
+   * @return 削除の失敗を知らせるレスポンス
    */
   @ResponseStatus(HttpStatus.OK)
   @ExceptionHandler({RecipeDeleteException.class})

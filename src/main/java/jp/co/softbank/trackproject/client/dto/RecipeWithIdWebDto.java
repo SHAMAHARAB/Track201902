@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * クライアントからのリクエスト、レスポンスを受けつけるDtoクラスです。
+ * クライアントへID付きのレシピをレスポンスするためのDtoクラスです。
  * @author H.Hamahara
  *
  */
