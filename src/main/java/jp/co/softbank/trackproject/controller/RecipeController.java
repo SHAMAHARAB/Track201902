@@ -1,5 +1,9 @@
 package jp.co.softbank.trackproject.controller;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import jp.co.softbank.trackproject.client.dto.RecipeWebDto;
 import jp.co.softbank.trackproject.client.exception.CreateExceptionResponse;
 import jp.co.softbank.trackproject.client.exception.DeleteExceptionResponse;
@@ -10,6 +14,7 @@ import jp.co.softbank.trackproject.exception.RecipeDeleteException;
 import jp.co.softbank.trackproject.service.RecipeService;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -115,11 +120,29 @@ public class RecipeController {
    * レシピの登録に失敗した時のハンドリングを行います。
    * 
    * @return 登録失敗時に返却するCreateExceptionResponseクラス
+   * @throws MethodArgumentNotValidException 
    */
   @ResponseStatus(HttpStatus.OK)
   @ExceptionHandler({MethodArgumentNotValidException.class})
-  public CreateExceptionResponse badRequest() {
-    return new CreateExceptionResponse("title, making_time, serves, ingredients, cost");
+  public CreateExceptionResponse badRequest(MethodArgumentNotValidException e)
+      throws MethodArgumentNotValidException {
+    if (e.getParameter().getMethod().getName().equals("create")) {
+      // 発生したバリデーションフィールドのリスト
+      List<String> validateFields = e.getBindingResult().getFieldErrors()
+          .stream()
+          .map(FieldError::getField)
+          .collect(Collectors.toList());
+      
+      // Responseのメッセージに渡すための文字列を作成
+      String validMessage = 
+          Arrays.asList("title", "making_time", "serves", "ingredients", "cost")
+          .stream()
+          .filter(s -> validateFields.contains(s))
+          .collect(Collectors.joining(", "));
+      
+      return new CreateExceptionResponse(validMessage);
+    }
+    throw e;
   }
   
   /**
