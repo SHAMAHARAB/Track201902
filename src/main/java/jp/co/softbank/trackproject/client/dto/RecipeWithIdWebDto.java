@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
  *
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class RecipeWithIdWebDto {
 
   private int id;
