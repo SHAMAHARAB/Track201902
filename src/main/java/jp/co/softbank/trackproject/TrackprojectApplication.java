@@ -6,9 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class TrackprojectApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(TrackprojectApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(TrackprojectApplication.class, args);
+  }
 
 }
 
