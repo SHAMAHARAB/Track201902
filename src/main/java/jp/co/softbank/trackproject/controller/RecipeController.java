@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import jp.co.softbank.trackproject.client.dto.RecipeWebDto;
-import jp.co.softbank.trackproject.client.exception.CreateExceptionResponse;
-import jp.co.softbank.trackproject.client.exception.DeleteExceptionResponse;
+import jp.co.softbank.trackproject.client.exception.RecipeCreateExceptionResponse;
+import jp.co.softbank.trackproject.client.exception.RecipeDeleteExceptionResponse;
 import jp.co.softbank.trackproject.client.response.AllRecipeResponse;
 import jp.co.softbank.trackproject.client.response.MessageResponse;
 import jp.co.softbank.trackproject.client.response.RecipeResponse;
@@ -119,12 +119,12 @@ public class RecipeController {
   /**
    * レシピの登録に失敗した時のハンドリングを行います。
    * 
-   * @return 登録失敗時に返却するCreateExceptionResponseクラス
-   * @throws MethodArgumentNotValidException 
+   * @return 登録失敗時に返却するRecipeCreateExceptionResponseクラス
+   * @throws MethodArgumentNotValidException MethodArgumentNotValidException
    */
   @ResponseStatus(HttpStatus.OK)
   @ExceptionHandler({MethodArgumentNotValidException.class})
-  public CreateExceptionResponse badRequest(MethodArgumentNotValidException e)
+  public RecipeCreateExceptionResponse badRequest(MethodArgumentNotValidException e)
       throws MethodArgumentNotValidException {
     if (e.getParameter().getMethod().getName().equals("create")) {
       // 発生したバリデーションフィールドのリスト
@@ -140,7 +140,7 @@ public class RecipeController {
           .filter(s -> validateFields.contains(s))
           .collect(Collectors.joining(", "));
       
-      return new CreateExceptionResponse(validMessage);
+      return new RecipeCreateExceptionResponse(validMessage);
     }
     throw e;
   }
@@ -149,12 +149,12 @@ public class RecipeController {
    * レシピの削除に失敗した時のハンドリングを行います。
    * 
    * @param e RecipeDeleteException
-   * @return 削除失敗時に返却するDeleteExceptionResponseクラス
+   * @return 削除失敗時に返却するRecipeDeleteExceptionResponseクラス
    */
   @ResponseStatus(HttpStatus.OK)
   @ExceptionHandler({RecipeDeleteException.class})
-  public DeleteExceptionResponse notFoundDeleteRecipe(RecipeDeleteException e) {
-    return new DeleteExceptionResponse(e.getMessage());
+  public RecipeDeleteExceptionResponse notFoundDeleteRecipe(RecipeDeleteException e) {
+    return new RecipeDeleteExceptionResponse(e.getMessage());
   }
 
 }

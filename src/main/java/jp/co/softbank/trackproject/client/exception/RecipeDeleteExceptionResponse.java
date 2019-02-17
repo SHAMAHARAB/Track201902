@@ -9,7 +9,7 @@ import lombok.Data;
  *
  */
 @Data
-public class DeleteExceptionResponse extends MessageResponse {
+public class RecipeDeleteExceptionResponse extends MessageResponse {
   
   private static final String NOT_FOUND_EXCEPTION_MESSAGE = "No Recipe found";
 
@@ -17,7 +17,7 @@ public class DeleteExceptionResponse extends MessageResponse {
    * コンストラクタです。
    * 
    */
-  public DeleteExceptionResponse() {
+  public RecipeDeleteExceptionResponse() {
     super(NOT_FOUND_EXCEPTION_MESSAGE);
   }
   
@@ -26,7 +26,7 @@ public class DeleteExceptionResponse extends MessageResponse {
    * 
    * @param message 表示したいメッセージ
    */
-  public DeleteExceptionResponse(String message) {
+  public RecipeDeleteExceptionResponse(String message) {
     super(message);
   }
   
